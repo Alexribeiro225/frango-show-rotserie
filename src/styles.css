@@ -649,9 +649,10 @@
 .saas-low-stock-item b { font-size: 13px; }
 .saas-low-stock-item small { font-size: 12px; font-weight: 700; color: oklch(0.58 0.21 28); white-space: nowrap; }
 .kitchen-flag { display:inline-block; margin-left:6px; padding:3px 9px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid; }
-.kitchen-flag.flag-paid,.kitchen-flag-banner.flag-paid { color:#11683f; background:#e6f7ee; border-color:#7fd3a8; }
-.kitchen-flag.flag-picked,.kitchen-flag-banner.flag-picked { color:#1d4f91; background:#e7f0fb; border-color:#93b8e6; }
-.kitchen-flag-banner { margin-top:12px; padding:10px 12px; border-radius:10px; border:1px solid; font-weight:800; font-size:13px; }
+.kitchen-flag.flag-paid,.kitchen-flag-banner.flag-paid { color:#0d5c4e; background:#ebf9f5; border-color:#86e3ce; }
+.kitchen-flag.flag-picked,.kitchen-flag-banner.flag-picked { color:#12447a; background:#eaf2fd; border-color:#9ec4f0; }
+.kitchen-flag-banner { display:flex; align-items:center; gap:9px; margin-top:12px; padding:11px 14px; border-radius:12px; border:1px solid; font-weight:800; font-size:13px; letter-spacing:.01em; }
+.kitchen-flag-banner svg { flex:none; }
 .kitchen-flag-btn { border-radius:10px; padding:10px 14px; font-weight:750; cursor:pointer; border:1px solid; background:white; }
 .kitchen-flag-btn.flag-paid { color:#11683f; border-color:#7fd3a8; }
 .kitchen-flag-btn.flag-picked { color:#1d4f91; border-color:#93b8e6; }

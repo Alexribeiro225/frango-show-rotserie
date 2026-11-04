@@ -648,3 +648,12 @@
 .saas-low-stock-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: 10px; background: oklch(0.97 0.02 80); border: 1px solid oklch(0.9 0.03 70); }
 .saas-low-stock-item b { font-size: 13px; }
 .saas-low-stock-item small { font-size: 12px; font-weight: 700; color: oklch(0.58 0.21 28); white-space: nowrap; }
+.kitchen-flag { display:inline-block; margin-left:6px; padding:3px 9px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid; }
+.kitchen-flag.flag-paid,.kitchen-flag-banner.flag-paid { color:#11683f; background:#e6f7ee; border-color:#7fd3a8; }
+.kitchen-flag.flag-picked,.kitchen-flag-banner.flag-picked { color:#1d4f91; background:#e7f0fb; border-color:#93b8e6; }
+.kitchen-flag-banner { margin-top:12px; padding:10px 12px; border-radius:10px; border:1px solid; font-weight:800; font-size:13px; }
+.kitchen-flag-btn { border-radius:10px; padding:10px 14px; font-weight:750; cursor:pointer; border:1px solid; background:white; }
+.kitchen-flag-btn.flag-paid { color:#11683f; border-color:#7fd3a8; }
+.kitchen-flag-btn.flag-picked { color:#1d4f91; border-color:#93b8e6; }
+.kitchen-flag-btn.flag-paid.is-on { background:#e6f7ee; }
+.kitchen-flag-btn.flag-picked.is-on { background:#e7f0fb; }

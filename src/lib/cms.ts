@@ -175,6 +175,7 @@ export type KitchenOrder = {
   payment_method: string; notes: string; items: OrderItem[];
   subtotal: number; delivery_fee: number | null; total: number;
   status: "new" | "preparing" | "ready" | "completed" | "cancelled";
+  paid_at?: string | null; picked_up_at?: string | null;
 };
 export async function createOrder(input: {
   customer_name: string; customer_phone: string; fulfillment: "delivery" | "pickup";
@@ -193,6 +194,9 @@ export async function listOrders(range?: { start: Date; end: Date }) {
 }
 export async function updateOrderStatus(id: number, status: KitchenOrder["status"]) {
   return rest("orders", `?id=eq.${id}`, { method: "PATCH", body: JSON.stringify({ status }) });
+}
+export async function setOrderFlag(id: number, flag: "paid_at" | "picked_up_at", on: boolean) {
+  return rest("orders", `?id=eq.${id}`, { method: "PATCH", body: JSON.stringify({ [flag]: on ? new Date().toISOString() : null }) });
 }
 
 export async function createCounterSale(payment_method: string, items: Array<{ product_id: number; quantity: number }>) {

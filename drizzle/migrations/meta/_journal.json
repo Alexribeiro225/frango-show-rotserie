@@ -50,6 +50,13 @@
       "when": 1793409542979,
       "tag": "0006_delete_orders_by_ids",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793782944416,
+      "tag": "0007_order_paid_pickedup",
+      "breakpoints": true
     }
   ]
 }

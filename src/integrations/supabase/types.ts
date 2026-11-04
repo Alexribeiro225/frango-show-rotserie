@@ -110,7 +110,9 @@ export type Database = {
           items: Json
           notes: string
           owner_id: string | null
+          paid_at: string | null
           payment_method: string
+          picked_up_at: string | null
           status: string
           subtotal: number
           total: number
@@ -126,7 +128,9 @@ export type Database = {
           items: Json
           notes?: string
           owner_id?: string | null
+          paid_at?: string | null
           payment_method: string
+          picked_up_at?: string | null
           status?: string
           subtotal: number
           total: number
@@ -142,7 +146,9 @@ export type Database = {
           items?: Json
           notes?: string
           owner_id?: string | null
+          paid_at?: string | null
           payment_method?: string
+          picked_up_at?: string | null
           status?: string
           subtotal?: number
           total?: number

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChefHat, Clock3, Printer, RefreshCw, Trash2 , X} from "lucide-react";
+import { ChefHat, CircleCheck, Clock3, Printer, RefreshCw, Trash2 , X} from "lucide-react";
 import { PeriodPicker } from "@/components/PeriodPicker";
 import { defaultPeriod, periodLabel, periodRange, type PeriodPreset } from "@/lib/period";
 import { deleteOrdersByIds, deleteOrdersInRange, listOrders, setOrderFlag, updateOrderStatus, type KitchenOrder } from "@/lib/cms";
@@ -178,8 +178,8 @@ const [selectMode, setSelectMode] = useState(false);
           <div><span className="kitchen-order-number">Pedido #{order.id}</span><span className={"kitchen-status status-" + order.status}>{statusLabel[order.status]}</span>{order.paid_at && <span className="kitchen-flag flag-paid">✓ PAGO</span>}{order.picked_up_at && <span className="kitchen-flag flag-picked">✓ RETIRADO</span>}</div>
           <time><Clock3 size={15} />{time(order.created_at)}</time>
         </div>
-        {order.paid_at && <div className="kitchen-flag-banner flag-paid">✓ PEDIDO PAGO — Pagamento confirmado</div>}
-        {order.picked_up_at && <div className="kitchen-flag-banner flag-picked">✓ PEDIDO RETIRADO — Entregue ao cliente</div>}
+        {order.paid_at && <div className="kitchen-flag-banner flag-paid" role="status"><CircleCheck size={19} /><span>Pedido pago — Pagamento confirmado</span></div>}
+        {order.picked_up_at && <div className="kitchen-flag-banner flag-picked" role="status"><CircleCheck size={19} /><span>Pedido retirado — Entregue ao cliente</span></div>}
         <div className="kitchen-order-customer"><b>{order.customer_name}</b>{order.customer_phone && <a href={"tel:" + order.customer_phone}>{order.customer_phone}</a>}<span>{order.fulfillment === "delivery" ? "🛵 Delivery" : order.fulfillment === "counter" ? "🏪 Balcão" : "🏠 Retirada"} · {order.payment_method}</span></div>
         {order.fulfillment === "delivery" && <div className="kitchen-address"><b>Endereço</b><span>{[order.address["street"], order.address["number"] && "nº " + order.address["number"], order.address["neighborhood"], order.address["cep"]].filter(Boolean).join(", ")}</span>{order.address["complement"] && <span>Complemento: {order.address["complement"]}</span>}{order.address["reference"] && <span>Referência: {order.address["reference"]}</span>}</div>}
         <div className="kitchen-items"><b>Itens</b>{(order.items || []).map((item,index) => <div className="kitchen-item-wrap" key={item.product_id + "-" + index}><div className="kitchen-item"><span><strong>{item.quantity}×</strong> {item.name}</span><b>{money(Number(item.line_total))}</b></div>{item.description && <small className="kitchen-item-description">{item.description}</small>}{item.components?.length ? <small className="kitchen-item-components">Composição: {item.components.map(component => (component.quantity * item.quantity) + "× " + component.name).join(" · ")}</small> : null}</div>)}</div>

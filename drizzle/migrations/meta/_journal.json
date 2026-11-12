@@ -64,6 +64,13 @@
       "when": 1793783939793,
       "tag": "0008_orders_write_grants_and_tenant_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794445831389,
+      "tag": "0009_counter_sale_customer_details",
+      "breakpoints": true
     }
   ]
 }

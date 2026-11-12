@@ -350,10 +350,17 @@ export type Database = {
         Returns: string
       }
       consume_combo_inventory: { Args: { p_items: Json }; Returns: undefined }
-      create_counter_sale: {
-        Args: { p_items: Json; p_payment_method: string }
-        Returns: Json
-      }
+      create_counter_sale:
+        | { Args: { p_items: Json; p_payment_method: string }; Returns: Json }
+        | {
+            Args: {
+              p_customer_name: string
+              p_customer_phone: string
+              p_items: Json
+              p_payment_method: string
+            }
+            Returns: Json
+          }
       create_order: {
         Args: {
           p_address: Json

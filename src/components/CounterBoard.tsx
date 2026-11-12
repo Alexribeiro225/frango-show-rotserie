@@ -10,6 +10,8 @@ export function CounterBoard() {
   const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState<Record<number, number>>({});
   const [payment, setPayment] = useState("PIX");
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -44,9 +46,11 @@ export function CounterBoard() {
     if (!selected.length || busy) return;
     setBusy(true); setError("");
     try {
-      const sale = await createCounterSale(payment, selected.map(product => ({ product_id: product.id, quantity: cart[product.id] ?? 0 })));
+      const sale = await createCounterSale(payment, selected.map(product => ({ product_id: product.id, quantity: cart[product.id] ?? 0 })), { name: customerName, phone: customerPhone });
       setReceipt({ ...sale, created_at: new Date().toISOString() });
       setCart({});
+      setCustomerName("");
+      setCustomerPhone("");
       void loadProducts().catch(() => setError("Venda registrada, mas não foi possível atualizar a lista de estoque."));
     } catch (e) { setError(e instanceof Error ? e.message : "Não foi possível registrar a venda."); }
     finally { setBusy(false); }
@@ -89,6 +93,10 @@ export function CounterBoard() {
           <div><b>{cart[product.id]}× {product.name}</b><span>{money(Number(product.price) * (cart[product.id] ?? 0))}</span></div>
           <button aria-label={"Remover " + product.name} onClick={() => change(product,-(cart[product.id] ?? 0))}><Trash2 size={16}/></button>
         </div>)}</div>}
+        <div className="counter-customer">
+          <label>Nome do cliente (opcional)<input type="text" value={customerName} onChange={e => setCustomerName(e.target.value)} placeholder="Nome para identificar o pedido" maxLength={120} autoComplete="name" /></label>
+          <label>Telefone do cliente (opcional)<input type="tel" value={customerPhone} onChange={e => setCustomerPhone(e.target.value)} placeholder="(14) 99999-9999" maxLength={30} autoComplete="tel" /></label>
+        </div>
         <label className="counter-payment">Forma de pagamento<select value={payment} onChange={e => setPayment(e.target.value)}><option>PIX</option><option>Cartão</option><option>Dinheiro</option></select></label>
         <div className="counter-total"><span>Total</span><b>{money(total)}</b></div>
         <button className="counter-primary counter-finish" disabled={!selected.length || busy} onClick={() => void finishSale()}>{busy ? "Registrando…" : "Registrar venda"}</button>

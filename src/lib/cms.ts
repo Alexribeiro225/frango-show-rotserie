@@ -199,19 +199,26 @@ export async function setOrderFlag(id: number, flag: "paid_at" | "picked_up_at",
   return rest("orders", `?id=eq.${id}`, { method: "PATCH", body: JSON.stringify({ [flag]: on ? new Date().toISOString() : null }) });
 }
 
+export type CounterSaleDetails = {
+  customer: CounterCustomer;
+  fulfillment: "counter" | "delivery";
+  address: { street: string; number: string };
+};
 export type CounterCustomer = { name: string; phone: string };
-export function counterSalePayload(payment_method: string, items: Array<{ product_id: number; quantity: number }>, customer: CounterCustomer) {
+export function counterSalePayload(payment_method: string, items: Array<{ product_id: number; quantity: number }>, details: CounterSaleDetails) {
   return {
     p_payment_method: payment_method,
     p_items: items,
-    p_customer_name: customer.name.trim(),
-    p_customer_phone: customer.phone.trim(),
+    p_customer_name: details.customer.name.trim(),
+    p_customer_phone: details.customer.phone.trim(),
+    p_fulfillment: details.fulfillment,
+    p_address: details.fulfillment === "delivery" ? { street: details.address.street.trim(), number: details.address.number.trim() } : {},
   };
 }
-export async function createCounterSale(payment_method: string, items: Array<{ product_id: number; quantity: number }>, customer: CounterCustomer) {
+export async function createCounterSale(payment_method: string, items: Array<{ product_id: number; quantity: number }>, details: CounterSaleDetails) {
   return rest("rpc/create_counter_sale", "", {
     method: "POST",
-    body: JSON.stringify(counterSalePayload(payment_method, items, customer)),
+    body: JSON.stringify(counterSalePayload(payment_method, items, details)),
   }) as Promise<{ id: number; order_number: number; items: OrderItem[]; subtotal: number; total: number; payment_method: string }>;
 }
 

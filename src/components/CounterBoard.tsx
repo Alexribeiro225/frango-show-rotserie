@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Minus, Plus, Printer, Search, ShoppingCart, Trash2 } from "lucide-react";
+import { Bike, Minus, Plus, Printer, Search, ShoppingCart, Store, Trash2 } from "lucide-react";
 import { createCounterSale, loadPublicContent, type Product } from "@/lib/cms";
 
 const money = (value: number) => Number(value).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -12,6 +12,9 @@ export function CounterBoard() {
   const [payment, setPayment] = useState("PIX");
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+  const [fulfillment, setFulfillment] = useState<"counter" | "delivery">("counter");
+  const [street, setStreet] = useState("");
+  const [residenceNumber, setResidenceNumber] = useState("");
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -44,13 +47,24 @@ export function CounterBoard() {
   }
   async function finishSale() {
     if (!selected.length || busy) return;
+    if (fulfillment === "delivery" && (!street.trim() || !residenceNumber.trim())) {
+      setError("Informe a rua e o número da residência para registrar o delivery.");
+      return;
+    }
     setBusy(true); setError("");
     try {
-      const sale = await createCounterSale(payment, selected.map(product => ({ product_id: product.id, quantity: cart[product.id] ?? 0 })), { name: customerName, phone: customerPhone });
+      const sale = await createCounterSale(payment, selected.map(product => ({ product_id: product.id, quantity: cart[product.id] ?? 0 })), {
+        customer: { name: customerName, phone: customerPhone },
+        fulfillment,
+        address: { street, number: residenceNumber },
+      });
       setReceipt({ ...sale, created_at: new Date().toISOString() });
       setCart({});
       setCustomerName("");
       setCustomerPhone("");
+      setFulfillment("counter");
+      setStreet("");
+      setResidenceNumber("");
       void loadProducts().catch(() => setError("Venda registrada, mas não foi possível atualizar a lista de estoque."));
     } catch (e) { setError(e instanceof Error ? e.message : "Não foi possível registrar a venda."); }
     finally { setBusy(false); }
@@ -93,10 +107,18 @@ export function CounterBoard() {
           <div><b>{cart[product.id]}× {product.name}</b><span>{money(Number(product.price) * (cart[product.id] ?? 0))}</span></div>
           <button aria-label={"Remover " + product.name} onClick={() => change(product,-(cart[product.id] ?? 0))}><Trash2 size={16}/></button>
         </div>)}</div>}
+        <div className="counter-fulfillment" role="group" aria-label="Tipo do pedido">
+          <button type="button" className={fulfillment === "counter" ? "is-active" : ""} aria-pressed={fulfillment === "counter"} onClick={() => setFulfillment("counter")}><Store size={18}/> Balcão</button>
+          <button type="button" className={fulfillment === "delivery" ? "is-active" : ""} aria-pressed={fulfillment === "delivery"} onClick={() => setFulfillment("delivery")}><Bike size={19}/> Delivery</button>
+        </div>
         <div className="counter-customer">
           <label>Nome do cliente (opcional)<input type="text" value={customerName} onChange={e => setCustomerName(e.target.value)} placeholder="Nome para identificar o pedido" maxLength={120} autoComplete="name" /></label>
           <label>Telefone do cliente (opcional)<input type="tel" value={customerPhone} onChange={e => setCustomerPhone(e.target.value)} placeholder="(14) 99999-9999" maxLength={30} autoComplete="tel" /></label>
         </div>
+        {fulfillment === "delivery" && <div className="counter-delivery-address">
+          <label>Nome da rua<input type="text" value={street} onChange={e => setStreet(e.target.value)} placeholder="Rua da entrega" maxLength={160} autoComplete="address-line1" /></label>
+          <label>Número da residência<input type="text" value={residenceNumber} onChange={e => setResidenceNumber(e.target.value)} placeholder="Nº" maxLength={20} /></label>
+        </div>}
         <label className="counter-payment">Forma de pagamento<select value={payment} onChange={e => setPayment(e.target.value)}><option>PIX</option><option>Cartão</option><option>Dinheiro</option></select></label>
         <div className="counter-total"><span>Total</span><b>{money(total)}</b></div>
         <button className="counter-primary counter-finish" disabled={!selected.length || busy} onClick={() => void finishSale()}>{busy ? "Registrando…" : "Registrar venda"}</button>

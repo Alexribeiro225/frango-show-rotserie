@@ -71,6 +71,13 @@
       "when": 1794445831389,
       "tag": "0009_counter_sale_customer_details",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794573037224,
+      "tag": "0010_counter_sale_delivery_address",
+      "breakpoints": true
     }
   ]
 }

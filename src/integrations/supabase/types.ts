@@ -361,6 +361,17 @@ export type Database = {
             }
             Returns: Json
           }
+        | {
+            Args: {
+              p_address: Json
+              p_customer_name: string
+              p_customer_phone: string
+              p_fulfillment: string
+              p_items: Json
+              p_payment_method: string
+            }
+            Returns: Json
+          }
       create_order: {
         Args: {
           p_address: Json
